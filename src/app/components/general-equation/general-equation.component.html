@@ -1,0 +1,41 @@
+<div id="{{canvasId}}" class="component-tile">
+  <div class="float-right-div answer-table mat-elevation-z8">
+    <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" matSort>
+      <ng-container *ngFor="let column of initColumns" [matColumnDef]="column.name">
+        <th mat-header-cell *matHeaderCellDef>{{ column.display }}</th>
+        <td mat-cell *matCellDef="let ans">{{ ans.answer }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row class={{getAnswerClass(row)}} *matRowDef="let row; columns: displayedColumns">
+        <td>{{row.answer}}</td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <div class="component-title">
+      {{title}}
+    </div>
+    <div class="slider-div">Max Number:
+      <ngx-slider [(value)]="maxNumber" [options]="maxNumberOptions"
+                  (userChangeEnd)="updateMaxNumber($event)"></ngx-slider>
+    </div>
+  </div>
+  <div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div *ngIf="!isSqrt" class="stats">
+        {{a}} {{operator}} {{b}} =
+      </div>
+      <div *ngIf="isSqrt" class="stats">
+        &#8730;{{a}} =
+      </div>
+      <input id="{{inputId}}" type=number class={{inputStyle}} autocomplete="off" formControlName="answer"/>
+      <button *ngIf="!answered" type="submit" class="button">Submit</button>
+      <button *ngIf="answered" class="button" (click)="resetForm()">Next</button>
+    </form>
+  </div>
+  <div class="stats">
+    <div>
+      Solved : {{ solved }} - Missed: {{missed}} - Streak: {{streak}} - Max Streak: {{maxStreak}}
+    </div>
+  </div>
+</div>

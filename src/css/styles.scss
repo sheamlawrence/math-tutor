@@ -1,0 +1,102 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body {
+  background-image: radial-gradient(circle at 62% 44%, #ffffff, #ABEBC6);
+  background-size: cover;
+}
+
+form {
+  margin-top: 2% !important;
+  display: flex;
+  font-size: 48px;
+}
+
+input {
+  border: none;
+  border-bottom: 1px inset black;
+  border-top: 1px inset lightgrey;
+  border-radius: 10px;
+  text-align: center;
+  width: 10%;
+  font-size: 36px;
+  margin: 25px;
+}
+
+table {
+  background-color: aliceblue;
+}
+
+.header {
+  text-align: center;
+  font-family: Impact, serif;
+  font-size: 64px;
+}
+
+.component-title {
+  font-size: 48px;
+  width: 500px;
+  font-family: monospace;
+}
+
+.component-tiles {
+  margin: 10px;
+}
+
+.close {
+  background-color: rgb(188, 255, 188);
+}
+
+input:focus {
+  outline: none;
+}
+
+.stats {
+  font-size: 30px;
+  margin-top: 2%;
+  font-family: monospace;
+}
+
+.component-tile {
+  padding: 10px;
+  margin: 10px;
+  border: 3px outset gray;
+  border-radius: 10px;
+  background-color: lavender;
+}
+
+.button {
+  color: black;
+  margin: 30px;
+  font-size: 18px;
+  background-color: lightgray;
+  border: 3px outset gray;
+  border-radius: 10px;
+  height: 40px;
+  width: 150px;
+}
+
+.button:hover {
+  color: white;
+  cursor: pointer;
+}
+
+.button:active {
+  box-shadow: 0 2px #666;
+  transform: translateY(2px);
+}
+
+.no-answer {
+  background-color: white;
+}
+
+.valid-answer {
+  background-color: lightgreen;
+}
+
+.invalid-answer {
+  background-color: lightcoral;
+}
+
+.float-right-div {
+  float: right;
+}

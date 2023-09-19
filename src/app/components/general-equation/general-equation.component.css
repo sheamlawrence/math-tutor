@@ -1,0 +1,52 @@
+table {
+  border: 2px solid grey;
+  border-radius: 5px;
+}
+
+table th {
+  font-weight: bold;
+  font-size: 24px;
+  text-align: center;
+  border: 1px solid grey;
+}
+
+table row {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+table td {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.answer-table {
+  border:1px outset grey;
+  border-radius: 5px;
+  background-color: aliceblue;
+  float: right;
+  margin: 20px;
+  width: 400px;
+  height: 300px;
+  overflow: auto;
+}
+
+ngx-slider {
+  width: 300px;
+}
+
+.slider-div {
+  font-family: monospace, serif;
+  align-content: center;
+  margin: 20px;
+}
+
+.wrong-answer {
+  background-color: lightpink;
+}
+
+.correct-answer {
+  background-color: #ABEBC6;
+}
