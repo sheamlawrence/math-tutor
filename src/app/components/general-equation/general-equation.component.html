@@ -23,10 +23,10 @@
   <div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div *ngIf="!isSqrt" class="stats">
-        {{a}} {{operator}} {{b}} =
+        {{numberOne}} {{operator}} {{numberTwo}} =
       </div>
       <div *ngIf="isSqrt" class="stats">
-        &#8730;{{a}} =
+        &#8730;{{numberOne}} =
       </div>
       <input id="{{inputId}}" type=number class={{inputStyle}} autocomplete="off" formControlName="answer"/>
       <button *ngIf="!answered" type="submit" class="button">Submit</button>

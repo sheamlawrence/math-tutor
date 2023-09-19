@@ -15,5 +15,5 @@ export enum EquationType {
 })
 export class AppComponent {
   equationType = EquationType
-  title = 'math-game';
+  title = 'math-tutor';
 }

@@ -7,6 +7,9 @@ import {Options} from 'ngx-slider-v2';
 import {ToastService} from "../../services/toast.service"
 import {ConfettiService} from "../../services/confetti.service";
 
+/**
+ * Primary widget class for equation form/widget handling
+ */
 @Component({
   selector: 'app-general-equation',
   templateUrl: './general-equation.component.html',
@@ -55,7 +58,7 @@ export class GeneralEquationComponent {
     this.dataSource.data = this.answers
     this.maxNumber = 10
     this.renderer = rendererFactory.createRenderer(null, null)
-    this.validator = MathValidators.addition('answer', 'a', 'b')
+    this.validator = MathValidators.addition('answer', 'numberOne', 'numberTwo')
     this.form = this.initForm()
   }
 
@@ -63,6 +66,10 @@ export class GeneralEquationComponent {
     this.form = this.initForm()
   }
 
+  /**
+   * Construct a form for this equation type.
+   * It holds the formula's values and answer for each displayed general equation widget.
+   */
   initForm(): FormGroup {
     let formGroup
     if (this.equationType) {
@@ -82,10 +89,10 @@ export class GeneralEquationComponent {
         }
         this.addToLastInputs(add1, add2)
         formGroup = new FormGroup({
-          a: new FormControl(add1),
-          b: new FormControl(add2),
+          numberOne: new FormControl(add1),
+          numberTwo: new FormControl(add2),
           answer: new FormControl('')
-        }, [MathValidators.addition('answer', 'a', 'b')])
+        }, [MathValidators.addition('answer', 'numberOne', 'numberTwo')])
         break;
       case EquationType.SUBTRACTION:
         this.operator = '-'
@@ -100,10 +107,10 @@ export class GeneralEquationComponent {
         }
         this.addToLastInputs(sub1, sub2)
         formGroup = new FormGroup({
-          a: new FormControl(sub1 >= sub2 ? sub1 : sub2),
-          b: new FormControl(sub1 < sub2 ? sub1 : sub2),
+          numberOne: new FormControl(sub1 >= sub2 ? sub1 : sub2),
+          numberTwo: new FormControl(sub1 < sub2 ? sub1 : sub2),
           answer: new FormControl('')
-        }, [MathValidators.subtraction('answer', 'a', 'b')])
+        }, [MathValidators.subtraction('answer', 'numberOne', 'numberTwo')])
         break;
       case EquationType.MULTIPLICATION:
         this.operator = 'x'
@@ -118,10 +125,10 @@ export class GeneralEquationComponent {
         }
         this.addToLastInputs(multi1, multi2)
         formGroup = new FormGroup({
-          a: new FormControl(multi1),
-          b: new FormControl(multi2),
+          numberOne: new FormControl(multi1),
+          numberTwo: new FormControl(multi2),
           answer: new FormControl('')
-        }, [MathValidators.multiplication('answer', 'a', 'b')])
+        }, [MathValidators.multiplication('answer', 'numberOne', 'numberTwo')])
         break;
       case EquationType.DIVISION:
         this.operator = '/'
@@ -137,10 +144,10 @@ export class GeneralEquationComponent {
         this.addToLastInputs(div1, div2)
         let divProduct = div1 * div2
         formGroup = new FormGroup({
-          a: new FormControl(divProduct),
-          b: new FormControl(div1),
+          numberOne: new FormControl(divProduct),
+          numberTwo: new FormControl(div1),
           answer: new FormControl('')
-        }, [MathValidators.division('answer', 'a', 'b')])
+        }, [MathValidators.division('answer', 'numberOne', 'numberTwo')])
         break;
       case EquationType.SQUARE_ROOT:
         this.isSqrt = true
@@ -155,28 +162,38 @@ export class GeneralEquationComponent {
         this.addToLastInputs(sqrt1, sqrt1)
         let square = sqrt1 * sqrt1
         formGroup = new FormGroup({
-          a: new FormControl(square),
+          numberOne: new FormControl(square),
           answer: new FormControl('')
-        }, [MathValidators.squareroot('answer', 'a')])
+        }, [MathValidators.squareroot('answer', 'numberOne')])
         break;
       default:
         this.operator = '+'
         formGroup = new FormGroup({
-          a: new FormControl(this.getRandomNumber()),
-          b: new FormControl(this.getRandomNumber()),
+          numberOne: new FormControl(this.getRandomNumber()),
+          numberTwo: new FormControl(this.getRandomNumber()),
           answer: new FormControl('')
-        }, [MathValidators.addition('answer', 'a', 'b')])
+        }, [MathValidators.addition('answer', 'numberOne', 'numberTwo')])
         break;
     }
     return formGroup
   }
 
+  /**
+   * Check if the same formula has already been displayed recently
+   * @param num1
+   * @param num2
+   */
   isRecent(num1: number, num2: number): boolean {
     const key1 = num1 + '-' + num2
     const key2 = num2 + '-' + num1
     return this.lastInputs.includes(key1) || this.lastInputs.includes(key2)
   }
 
+  /**
+   * Track recent inputs to help prevent  the presentation of the same formula in succession
+   * @param num1
+   * @param num2
+   */
   addToLastInputs(num1: number, num2: number): void {
     const key1 = num1 + '-' + num2
     const key2 = num2 + '-' + num1
@@ -189,43 +206,76 @@ export class GeneralEquationComponent {
     }
   }
 
+  /**
+   * Increment our solved counter
+   */
   incrementSolved(): void {
     this.solved = this.solved + 1
   }
 
+  /**
+   * Increment our missed counter
+   */
   incrementMissed(): void {
     this.missed = this.missed + 1
   }
 
-  incrementStreak(): void {
-    this.streak++
-    this.maxStreak = Math.max(this.maxStreak, this.streak)
-    if (this.streak % this.streakCelebrationAmt === 0) {
-      this.doConfetti()
+  /**
+   * Increment our streak counter
+   */
+  incrementStreak(isReset: boolean = false): void {
+    if (isReset) {
+      this.streak = 0
+    } else {
+      this.streak++
+      this.maxStreak = Math.max(this.maxStreak, this.streak)
+      if (this.streak % this.streakCelebrationAmt === 0) {
+        this.doCongratulations()
+      }
     }
   }
 
-  get a() {
-    return this.form.value.a
+  /**
+   * Getter for first formula value.  This will be used in our validator.
+   */
+  get numberOne() {
+    return this.form.value.numberOne
   }
 
-  get b() {
-    return this.form.value.b
+  /**
+   * Getter for second formula value.  This will be used in our validator.
+   */
+  get numberTwo() {
+    return this.form.value.numberTwo
   }
 
+  /**
+   * Helper method to get a random number in line with our Max Number value
+   */
   getRandomNumber() {
     return Math.floor(Math.random() * this.maxNumber) + 1
   }
 
-  addAnswer(a: number, b: number, ans: string, correct: boolean) {
+  /**
+   * Add an answer to our answers list which acts as a datasource for the Answers table in each equation widget
+   * @param numberOne
+   * @param numberTwo
+   * @param ans
+   * @param correct
+   */
+  addAnswer(numberOne: number, numberTwo: number, ans: string, correct: boolean) {
     if (this.isSqrt) {
-      this.answers.unshift({answer: ans + ' x ' + ans + ' = ' + a, correct: correct})
+      this.answers.unshift({answer: ans + ' x ' + ans + ' = ' + numberOne, correct: correct})
     } else {
-      this.answers.unshift({answer: a + ' ' + this.operator + ' ' + b + ' = ' + ans, correct: correct})
+      this.answers.unshift({answer: numberOne + ' ' + this.operator + ' ' + numberTwo + ' = ' + ans, correct: correct})
     }
     this.dataSource.data = this.answers
   }
 
+  /**
+   * Reset the formula form and re-focus input
+   * @param style
+   */
   resetForm(style?: string) {
     this.answered = false
     this.inputStyle = style ? style : this.noAnswerStyle
@@ -233,6 +283,10 @@ export class GeneralEquationComponent {
     this.focusInput()
   }
 
+  /**
+   * Return correct answer CSS for given row
+   * @param row
+   */
   getAnswerClass(row: any): string {
     if (row.correct) {
       return this.correctAnswerStyle
@@ -240,23 +294,38 @@ export class GeneralEquationComponent {
     return this.wrongAnswerStyle
   }
 
+  /**
+   * Focus the cursor in the user input number box
+   */
   focusInput() {
     this.renderer.selectRootElement('#' + this.inputId).focus()
   }
 
+  /**
+   * Update our max number and reset our form.  This is called by the Max Number slider UI component
+   * @param event
+   */
   updateMaxNumber(event: any) {
     this.maxNumber = event.value
     this.resetForm()
   }
 
-  doConfetti() {
+  /**
+   * Fire the confetti cannon and display an encouraging message
+   */
+  doCongratulations() {
     this.toastService.showCongratsToast(this.streak, this.maxStreak)
     this.confettiService.canon()
   }
 
+  /**
+   * Equation form submit handler.
+   * Handle correct answer and handle incorrect answer.
+   * Track counter value changes.
+   */
   onSubmit() {
-    const numA = this.form.value.a
-    const numB = this.form.value.b
+    const numA = this.form.value.numberOne
+    const numB = this.form.value.numberTwo
     const ans = this.form.value.answer
     if (this.form.valid) {
       this.answered = true
@@ -273,7 +342,7 @@ export class GeneralEquationComponent {
         this.inputStyle = this.wrongAnswerStyle
         this.form.value.answer = ''
         this.maxStreak = Math.max(this.maxStreak, this.streak)
-        this.streak = 0;
+        this.incrementStreak(true)
         this.toastService.showWhoopsToast(answer)
       }
       this.focusInput()
