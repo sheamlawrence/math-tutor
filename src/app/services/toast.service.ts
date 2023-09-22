@@ -21,7 +21,7 @@ export class ToastService {
     const messages = ["Great Job!!! Keep it up!",
       "You're on a roll!",
       "Wow, you have a streak of " + streak + "! Let's try to get up to " + (streak + 5),
-      "Wow! " + (maxStreak > streak ? "You can beat your Max Streak of " + maxStreak + " I bet!" : "You're maxStreak is going up!"),
+      "Wow! " + (maxStreak > streak ? "You can beat your Max Streak of " + maxStreak + " I bet!" : "You're Max Streak is going up!"),
       "If it's too easy for someone as smart as you, try adjusting the Max Number setting :)",
       "You're great at this!",
       "You're on a great streak!",
