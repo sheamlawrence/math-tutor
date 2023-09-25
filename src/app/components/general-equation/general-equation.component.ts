@@ -99,6 +99,7 @@ export class GeneralEquationComponent {
         this.inputId = 'sub-input'
         this.sliderId = 'sub-max-num-slider'
         this.canvasId = 'sub-component-id'
+        this.maxNumber = 50
         let sub1 = this.getRandomNumber()
         let sub2 = this.getRandomNumber()
         while (this.isRecent(sub1, sub2)) {
@@ -155,6 +156,7 @@ export class GeneralEquationComponent {
         this.inputId = 'sqrt-input'
         this.sliderId = 'sqrt-max-num-slider'
         this.canvasId = 'sqrt-component-id'
+        this.maxNumber = 12
         let sqrt1 = this.getRandomNumber()
         while (this.isRecent(sqrt1, sqrt1)) {
           sqrt1 = this.getRandomNumber()
